@@ -1,0 +1,14 @@
+all:
+	just clean
+	just build
+	just run
+
+clean:
+	rm -f calc.o calc
+
+build:
+	nasm -f elf64 calc.asm
+	ld -m elf_x86_64 -o calc calc.o
+
+run:
+	./calc
