@@ -112,7 +112,35 @@ print3:
 	call printf
 
 	# (4) z = (x + y) / (x - y)
-	# TODO
+
+	# %rax <- x + y
+	movq X(%rbp), %rax
+	addq Y(%rbp), %rax
+
+	# %rbx <- x - y
+	movq X(%rbp), %rbx
+	subq Y(%rbp), %rbx
+
+	# %rax <- (x + y) div (x - y)
+	# %rdx <- (x + y) rem (x - y)
+	cqo
+	idivq %rbx
+
+	movq %rax, %r15
+	imulq $1000, %rdx, %rax
+	cqo
+	idivq %rbx
+
+	cmpq $0, %rax
+	jge print4
+	negq %rax
+
+print4:
+	movq $pfmtd4, %rdi
+	movq %r15, %rsi
+	movq %rax, %rdx
+	xorq %rax, %rax
+	call printf
 
 	# (5) z = (3x^3 - 1) / x^3
 	# TODO
