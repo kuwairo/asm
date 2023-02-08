@@ -79,7 +79,37 @@ print1:
 	call printf
 
 	# (3) z = (xy + 1) / x^2
-	# TODO
+
+	# %rbx <- x^2
+	movq X(%rbp), %rax
+	imulq %rax
+	movq %rax, %rbx
+
+	# %rax <- xy + 1
+	movq X(%rbp), %rax
+	imulq Y(%rbp)
+	incq %rax
+
+	# %rax <- (xy + 1) div x^2
+	# %rdx <- (xy + 1) rem x^2
+	cqo
+	idivq %rbx
+
+	movq %rax, %r15
+	imulq $1000, %rdx, %rax
+	cqo
+	idivq %rbx
+
+	cmpq $0, %rax
+	jge print3
+	negq %rax
+
+print3:
+	movq $pfmtd3, %rdi
+	movq %r15, %rsi
+	movq %rax, %rdx
+	xorq %rax, %rax
+	call printf
 
 	# (4) z = (x + y) / (x - y)
 	# TODO
