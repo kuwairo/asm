@@ -143,7 +143,38 @@ print4:
 	call printf
 
 	# (5) z = (3x^3 - 1) / x^3
-	# TODO
+
+	# %rax <- x^3
+	movq X(%rbp), %rax
+	imulq %rax
+	imulq X(%rbp)
+
+	# %rax <- 3x^3 - 1
+	# %rbx <- x^3
+	movq %rax, %rbx
+	imulq $3, %rax
+	decq %rax
+
+	# %rax <- (3x^3 - 1) div x^3
+	# %rdx <- (3x^3 - 1) rem x^3
+	cqo
+	idivq %rbx
+
+	movq %rax, %r15
+	imulq $1000, %rdx, %rax
+	cqo
+	idivq %rbx
+
+	cmpq $0, %rax
+	jge print5
+	negq %rax
+
+print5:
+	movq $pfmtd5, %rdi
+	movq %r15, %rsi
+	movq %rax, %rdx
+	xorq %rax, %rax
+	call printf
 
 	xorq %rax, %rax
 	leave
