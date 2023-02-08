@@ -1,6 +1,5 @@
 build:
-	as -o lab.o lab.s
-	ld -o lab lab.o
+	gcc -static -o lab lab.s
 
 clean:
-	rm -f lab.o lab
+	rm -f lab
