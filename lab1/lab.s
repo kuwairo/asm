@@ -64,7 +64,19 @@ print1:
 	call printf
 
 	# (2) z = x^3 + y - 1
-	# TODO
+
+	# %rax <- x^3 + y - 1
+	movq X(%rbp), %rax
+	imulq %rax
+	imulq X(%rbp)
+	addq Y(%rbp), %rax
+	decq %rax
+
+	movq $pfmtd2, %rdi
+	movq %rax, %rsi
+	movq $0, %rdx
+	xorq %rax, %rax
+	call printf
 
 	# (3) z = (xy + 1) / x^2
 	# TODO
