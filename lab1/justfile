@@ -1,5 +1,5 @@
 build:
-	gcc -static -o lab lab.s
+	gcc -static -o lab lab.s printdiv.s
 
 clean:
 	rm -f lab
