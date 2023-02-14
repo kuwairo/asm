@@ -3,9 +3,9 @@
 .section .data
 
 sfmt:
-	.asciz "%lf"
+	.asciz "%ld %lf"
 pfmt:
-	.asciz "y(%ld, %.9lf) = %.9lf\n"
+	.asciz "y(%ld, %.3lf) = %.3lf\n"
 
 d2:
 	.double 2.0
@@ -16,7 +16,8 @@ d7:
 
 .section .text
 
-.equ A, -8
+.equ X, -8
+.equ A, -16
 
 main:
 	pushq %rbp
@@ -24,11 +25,14 @@ main:
 	subq $16, %rsp
 
 	movq $sfmt, %rdi
-	leaq A(%rbp), %rsi
+	leaq X(%rbp), %rsi
+	leaq A(%rbp), %rdx
 	xorq %rax, %rax
 	call scanf
 
-	movq $0, %r12
+	movq X(%rbp), %r12
+	movq X(%rbp), %r13
+	addq $9, %r13
 
 loop:
 	movq A(%rbp), %xmm0
@@ -66,8 +70,8 @@ done:
 	call printf
 
 	addq $1, %r12
-	cmpq $9, %r12
-	jle loop
+	cmpq %r12, %r13
+	jge loop
 
 	xorq %rax, %rax
 	leave
