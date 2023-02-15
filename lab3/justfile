@@ -1,5 +1,6 @@
 build:
-	gcc -static -o lab lab.s printm.s rotatem.s
+	gcc -static -o mlab mlab.s printm.s rotatem.s
+	gcc -static -o slab slab.s
 
 clean:
-	rm -f lab
+	rm -f mlab slab
