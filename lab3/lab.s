@@ -66,6 +66,20 @@ input:
 	xorq %rax, %rax
 	call printm
 
+	# Rotate the matrix (90 deg CW)
+
+	movq %r12, %rdi
+	movq M(%rbp), %rsi
+	xorq %rax, %rax
+	call rotatem
+
+	# Print the matrix, again
+
+	movq %r12, %rdi
+	movq M(%rbp), %rsi
+	xorq %rax, %rax
+	call printm
+
 	# Free
 
 	movq %r12, %rdi
