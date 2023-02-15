@@ -59,26 +59,27 @@ input:
 	cmpq %r13, Q(%rbp)
 	jg input
 
-	# Print the matrix
-
 	movq %r12, %rdi
 	movq M(%rbp), %rsi
 	xorq %rax, %rax
 	call printm
 
-	# Rotate the matrix (90 deg CW)
+	movq $0, %r14
 
+rloop:
 	movq %r12, %rdi
 	movq M(%rbp), %rsi
 	xorq %rax, %rax
 	call rotatem
 
-	# Print the matrix, again
-
 	movq %r12, %rdi
 	movq M(%rbp), %rsi
 	xorq %rax, %rax
 	call printm
+
+	incq %r14
+	cmpq $3, %r14
+	jl rloop
 
 	# Free
 
