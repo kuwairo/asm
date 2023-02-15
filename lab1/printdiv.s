@@ -1,12 +1,14 @@
 .globl printdiv
 .type printdiv, @function
 
-.section .text
+.section .data
 
 pos:
 	.quad 0 # ''
 neg:
 	.quad 45 # '-'
+
+.section .text
 
 .equ N, -8
 .equ M, -16
