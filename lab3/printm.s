@@ -19,6 +19,10 @@ printm:
 	movq %rdi, %r12 # matrix
 	movq %rsi, %r13 # matrix size (M)
 
+	movq $nl, %rdi
+	xorq %rax, %rax
+	call printf
+
 	movq $0, %r14 # row counter
 
 rloop:
@@ -45,6 +49,10 @@ cloop:
 	incq %r14
 	cmpq %r14, %r13
 	jg rloop
+
+	movq $nl, %rdi
+	xorq %rax, %rax
+	call printf
 
 	popq %r15
 	popq %r14
