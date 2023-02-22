@@ -5,6 +5,8 @@
 
 sfmt:
 	.asciz "%100[^,],%100[^,],%10[^,],%ld\n"
+rmode:
+	.asciz "r"
 
 .section .text
 
@@ -32,7 +34,14 @@ loadr:
 	movq %rsp, %rbp
 	subq $32, %rsp
 
-	movq %rdi, FPT(%rbp) # FILE pointer
+	# %rdi <- filepath
+
+	movq $rmode, %rsi
+	call fopen
+
+	cmpq $0, %rax
+	je ecode
+	movq %rax, FPT(%rbp)
 
 	movq $BSIZE, %rdi
 	call malloc

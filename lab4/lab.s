@@ -11,9 +11,6 @@ ofmt:
 	.asciz "%s,%s,%s,%ld\n"
 name:
 	.asciz "output"
-
-rmode:
-	.asciz "r"
 wmode:
 	.asciz "w"
 
@@ -43,14 +40,6 @@ main:
 	call scanf
 
 	movq %r12, %rdi
-	movq $rmode, %rsi
-	call fopen
-
-	cmpq $0, %rax
-	je fmem
-	movq %rax, %r13
-
-	movq %r13, %rdi
 	call loadr
 
 	movq %rax, %r14 # array pointer
