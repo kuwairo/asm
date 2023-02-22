@@ -2,4 +2,4 @@ build:
 	gcc -static -o lab lab.s loadr.s
 
 clean:
-	rm -f lab
+	rm -f lab output

@@ -7,11 +7,15 @@ pfmt:
 sfmt:
 	.asciz "%4096[^\n]"
 
-rfmt:
-	.asciz "DST: '%s'\nSRC: '%s'\nDate: '%s'\nPrice: %ld\n\n"
+ofmt:
+	.asciz "%s,%s,%s,%ld\n"
+name:
+	.asciz "output"
 
-mode:
+rmode:
 	.asciz "r"
+wmode:
+	.asciz "w"
 
 .section .text
 
@@ -39,7 +43,7 @@ main:
 	call scanf
 
 	movq %r12, %rdi
-	movq $mode, %rsi
+	movq $rmode, %rsi
 	call fopen
 
 	cmpq $0, %rax
@@ -49,28 +53,43 @@ main:
 	movq %r13, %rdi
 	call loadr
 
-	# TODO: update data
-
 	movq %rax, %r14 # array pointer
 	movq %rdx, %r15 # array length
+
+	movq $name, %rdi
+	movq $wmode, %rsi
+	call fopen
+
+	cmpq $0, %rax
+	je fmem
+	movq %rax, %r13
 
 	movq %r14, %rbx
 
 wloop:
-	movq $rfmt, %rdi
-	leaq DSTOFF(%rbx), %rsi
-	leaq SRCOFF(%rbx), %rdx
-	leaq DTEOFF(%rbx), %rcx
-	movq PRCOFF(%rbx), %r8
+	movq PRCOFF(%rbx), %r9
+	addq $99, %r9
+
+	movq %r13, %rdi
+	movq $ofmt, %rsi
+	leaq DSTOFF(%rbx), %rdx
+	leaq SRCOFF(%rbx), %rcx
+	leaq DTEOFF(%rbx), %r8
 	xorq %rax, %rax
-	call printf
+	call fprintf
 
 	addq $RSIZE, %rbx
 	decq %r15
 	jnz wloop
 
+	movq %r13, %rdi
+	call fclose
+
 fmem:
 	movq %r12, %rdi
+	call free
+
+	movq %r14, %rdi
 	call free
 
 stop:
