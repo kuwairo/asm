@@ -1,6 +1,6 @@
-.globl _start
+.globl main
 
-_start:
+main:
 	addi a0, x0, 1
 	la a1, msg
 	addi a2, x0, 15
