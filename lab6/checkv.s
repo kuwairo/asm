@@ -10,15 +10,11 @@ checkv:
 	sd ra, RA(sp)
 
 	# a0 <- numbers
-	# a1 <- length
-	# a2 <- step
+	# a1 <- length (in bytes)
+	# a2 <- step (in bytes)
 
-	li t0, 8
-	mul a1, a1, t0 # length (in bytes)
-	mul a2, a2, t0 # step (in bytes)
-
-	# a1 <- length (in bytes) + initial address
-	add a1, a1, a0 
+	# a1 <- length + initial address
+	add a1, a1, a0
 
 	mv t0, a0      # current address
 	add t1, t0, a2 # next address
