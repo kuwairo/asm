@@ -11,6 +11,8 @@ sfmt:
 	.asciz "%16777215[^\n]"
 efmt:
 	.asciz "The input buffer is blank\n"
+pfmt:
+	.asciz "%s\n"
 pfmts:
 	.asciz "The shortest word is '%.*s'\n"
 
@@ -21,6 +23,7 @@ pfmts:
 main:
 	stp x29, x30, [sp, -16]!
 
+	// Fill the input buffer
 	ldr x0, =sfmt
 	ldr x1, =buf
 	bl scanf
@@ -109,6 +112,38 @@ wshow:
 	ldr x0, =pfmts
 	mov x1, x3
 	mov x2, x7
+	bl printf
+
+	ldr x0, =buf // character array
+	mov x1, 0    // index
+
+cloop:
+	ldrb w2, [x0, x1]
+
+	// Check if the end of the input buffer is reached
+	// If so, print its contents
+	cmp w2, 0
+	beq cshow
+
+	// Check if the current character is a small letter
+	// If not, move forward
+	cmp w2, 97
+	blt cskip
+	cmp w2, 122
+	bgt cskip
+
+	// If it's a small letter, then capitalize it
+	sub w2, w2, 32
+	strb w2, [x0, x1]
+
+cskip:
+	add x1, x1, 1
+	b cloop
+
+cshow:
+	// Print the input buffer
+	ldr x0, =pfmt
+	ldr x1, =buf
 	bl printf
 
 stop:
