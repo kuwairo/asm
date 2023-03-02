@@ -57,7 +57,7 @@ wloop:
 	ldrb w6, [x0, x1]
 	sxtw x6, w6
 	cmp x6, 0
-	b escan
+	beq escan
 
 	// Is it the end of the current word?
 	// If not, increment the length and move forward
