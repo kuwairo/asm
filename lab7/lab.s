@@ -25,7 +25,7 @@ main:
 	ldr x1, =buf
 	bl scanf
 
-	mov x0, =buf // character array
+	ldr x0, =buf // character array
 	mov x1, 0    // index
 
 	mov x2, -1   // shortest word index
@@ -35,7 +35,8 @@ main:
 	mov x5, 1024 // current word length
 
 sscan:
-	ldrb x6, [x0, x1]
+	ldrb w6, [x0, x1]
+	sxtw x6, w6
 	cmp x6, DELIM
 	bne wscan
 
@@ -53,7 +54,8 @@ winit:
 	add x1, x1, 1
 
 wloop:
-	ldrb x6, [x0, x1]
+	ldrb w6, [x0, x1]
+	sxtw x6, w6
 	cmp x6, 0
 	b escan
 
@@ -95,17 +97,19 @@ eswrd:
 
 	// If the input buffer is blank, inform the user and stop
 	ldr x0, =efmt
-	call printf
+	bl printf
 	b stop
 
 wshow:
-	// Print the shortest word
+	// Calculate the address of the shortest word
 	ldr x7, =buf
 	add x7, x7, x2
+
+	// Print the shortest word
 	ldr x0, =pfmts
 	mov x1, x3
 	mov x2, x7
-	call printf
+	bl printf
 
 stop:
 	ldp x29, x30, [sp], 16
